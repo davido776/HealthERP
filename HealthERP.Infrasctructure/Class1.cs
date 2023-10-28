@@ -1,4 +1,4 @@
-﻿namespace HealthERP.Domain
+﻿namespace HealthERP.Infrasctructure
 {
     public class Class1
     {
