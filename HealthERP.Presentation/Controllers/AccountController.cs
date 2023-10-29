@@ -2,7 +2,6 @@
 using HealthERP.Application.Command.PolicyHolders;
 using HealthERP.Domain.Identity;
 using HealthERP.Presentation.Dtos;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +16,12 @@ namespace HealthERP.Presentation.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IConfiguration configuration;
-
+        
         public AccountController(UserManager<ApplicationUser> userManager,
-                                 SignInManager<ApplicationUser> signInManger, 
-                                 IConfiguration Configuration)
+                                 SignInManager<ApplicationUser> signInManger)
         {
             _userManager = userManager;
             _signInManager = signInManger;
-            configuration = Configuration;
         }
 
         [HttpPost("login")]
@@ -96,7 +92,7 @@ namespace HealthERP.Presentation.Controllers
             return HandleResult(await Mediator.Send(request));
         }
 
-        [HttpPost("policyholder")]
+        [HttpPost("policy-holder")]
         public async Task<IActionResult> CreatePolicyHolder([FromBody] CreatePolicyHolder.Request request)
         {
             return HandleResult(await Mediator.Send(request));
