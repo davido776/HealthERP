@@ -18,7 +18,7 @@ namespace HealthERP.Persistence
         public DbSet<PolicyHolder> PolicyHolders { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Claim> Claims { get; set; }
-        public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Expense> Expense { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

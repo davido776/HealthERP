@@ -50,6 +50,7 @@ namespace HealthERP.Application.Command.PolicyHolders
                             Email = request.Email,
                             NationalId = request.NationalId,
                             DateofBirth = request.DateofBirth,
+                            PolicyNumber = request.PolicyNumber,
                         };
 
                         var existingUser = userManager.FindByEmailAsync(request.Email);

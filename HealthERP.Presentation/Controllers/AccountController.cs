@@ -1,10 +1,11 @@
-﻿using HealthERP.Domain.Identity;
+﻿using HealthERP.Application.Command.Administrators;
+using HealthERP.Application.Command.PolicyHolders;
+using HealthERP.Domain.Identity;
 using HealthERP.Presentation.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -82,27 +83,23 @@ namespace HealthERP.Presentation.Controllers
                 SigningCredentials = creds
             };
 
-
-
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
 
-            //var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superdupersecretsuperdupersecretjjgfjdfgudfjgdgfudfudfgudftudgfudftudfgduftudfgduftdufgdufd"));
+        [HttpPost("admin")]
+        public async Task<IActionResult> CreateAdministrator([FromBody] CreateAdministrator.Request request)
+        {
+            return HandleResult(await Mediator.Send(request));
+        }
 
-            //var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            //var token = new JwtSecurityToken(
-            //        claims: claims,
-            //        expires: DateTime.Now.AddDays(7),
-            //        signingCredentials: creds
-            //    );
-
-            //var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            //return jwt;
+        [HttpPost("policyholder")]
+        public async Task<IActionResult> CreatePolicyHolder([FromBody] CreatePolicyHolder.Request request)
+        {
+            return HandleResult(await Mediator.Send(request));
         }
     }
 }

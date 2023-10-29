@@ -1,23 +1,14 @@
 using HealthERP.Application.Command.Administrators;
-using HealthERP.Application.Command.PolicyHolders;
 using HealthERP.Application.Constants;
 using HealthERP.Application.Interfaces;
 using HealthERP.Domain.Identity;
-using HealthERP.Domain.PolicyHolders;
 using HealthERP.Infrasctructure.Security;
 using HealthERP.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System.Collections.Generic;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,15 +27,6 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 });
 
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
-
-
-//builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-//{
-//    options.Password.RequireNonAlphanumeric = false;
-//})
-//.AddEntityFrameworkStores<AppDbContext>()
-//.AddSignInManager<SignInManager<ApplicationUser>>()
-//.AddDefaultTokenProviders();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
                 {
@@ -84,6 +66,7 @@ builder.Services.AddSwaggerGen(option =>
             new string[]{}
         }
     });
+    option.CustomSchemaIds(type => type.ToString());
 });
 
 
@@ -113,13 +96,6 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole(RoleConstants.AdministratorRole);
     });
 });
-
-
-
-
-
-
-
 
 var app = builder.Build();
 

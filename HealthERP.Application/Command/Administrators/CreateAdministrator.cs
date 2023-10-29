@@ -19,9 +19,6 @@ namespace HealthERP.Application.Command.Administrators
             public string Email { get; set; }
 
             public string Password { get; set; }
-            public string? NationalId { get; set; }
-
-            public string? PolicyNumber { get; set; }
 
             public DateTime DateofBirth { get; set; }
         }

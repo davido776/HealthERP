@@ -11,8 +11,6 @@ namespace HealthERP.Application.Command.Claims
     {
         public class Request : IRequest<Result<Unit>>
         {
-            public ClaimStatus Status { get; set; }
-
             public List<ExpenseModel> Expenses { get; set; } = new List<ExpenseModel>();
         }
 
@@ -42,7 +40,7 @@ namespace HealthERP.Application.Command.Claims
                 
                 var claim = new Claim
                 {
-                    Status = request.Status,
+                    Status = ClaimStatus.Submitted,
                     PolicyHolderId = policyHolderId          
                 };
 
