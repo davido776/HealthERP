@@ -24,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\HealthERP.Application\HealthERP.Application.csproj" />
     <ProjectReference Include="..\HealthERP.Infrasctructure\HealthERP.Infrasctructure.csproj" />
-    <ProjectReference Include="..\HealthERP.Migrations\HealthERP.Migrations.csproj" />
     <ProjectReference Include="..\HealthERP.Persistence\HealthERP.Persistence.csproj" />
   </ItemGroup>
 

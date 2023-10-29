@@ -7,7 +7,7 @@ using MediatR;
 
 namespace HealthERP.Application.Command.Claims
 {
-    public class CreateClaim
+    public class SubmitClaim
     {
         public class Request : IRequest<Result<Unit>>
         {
@@ -76,6 +76,5 @@ namespace HealthERP.Application.Command.Claims
 
             }
         }
-
     }
 }

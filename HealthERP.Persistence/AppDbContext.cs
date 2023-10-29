@@ -1,5 +1,6 @@
 ﻿using HealthERP.Domain.Administrator;
 using HealthERP.Domain.Claims;
+using HealthERP.Domain.Expenses;
 using HealthERP.Domain.Identity;
 using HealthERP.Domain.PolicyHolders;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace HealthERP.Persistence
         public DbSet<PolicyHolder> PolicyHolders { get; set; }
         public DbSet<Administrator> Administrators { get; set; }
         public DbSet<Claim> Claims { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

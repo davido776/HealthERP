@@ -2,6 +2,8 @@
 {
     public class PolicyConstants
     {
-        public const string PolicyHolderOnly = "PolicyHolderOnly";
+        public const string SubmitClaimPolicy = "CreateClaimPolicy";
+
+        public const string UpdateClaimPolicy = "UpdateClaimPolicy";
     }
 }

@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthERP.Infrasctructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthERP.Persistence", "HealthERP.Persistence\HealthERP.Persistence.csproj", "{920D1AD4-E057-4A25-8E15-8915F1EF6A35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthERP.Migrations", "HealthERP.Migrations\HealthERP.Migrations.csproj", "{90292AEE-900D-4FAD-A807-5132F12B1D3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthERP.API", "HealthERP.API\HealthERP.API.csproj", "{70310F88-99CE-44F6-AC42-225B6FA757A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthERP.API", "HealthERP.API\HealthERP.API.csproj", "{70310F88-99CE-44F6-AC42-225B6FA757A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HealthERP.Test", "HealthERP.Test\HealthERP.Test.csproj", "{D35C3835-8DDD-461B-80E4-B5FEB1ADF88D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,14 +43,14 @@ Global
 		{920D1AD4-E057-4A25-8E15-8915F1EF6A35}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{920D1AD4-E057-4A25-8E15-8915F1EF6A35}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{920D1AD4-E057-4A25-8E15-8915F1EF6A35}.Release|Any CPU.Build.0 = Release|Any CPU
-		{90292AEE-900D-4FAD-A807-5132F12B1D3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{90292AEE-900D-4FAD-A807-5132F12B1D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{90292AEE-900D-4FAD-A807-5132F12B1D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{90292AEE-900D-4FAD-A807-5132F12B1D3F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{70310F88-99CE-44F6-AC42-225B6FA757A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{70310F88-99CE-44F6-AC42-225B6FA757A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70310F88-99CE-44F6-AC42-225B6FA757A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70310F88-99CE-44F6-AC42-225B6FA757A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D35C3835-8DDD-461B-80E4-B5FEB1ADF88D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35C3835-8DDD-461B-80E4-B5FEB1ADF88D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35C3835-8DDD-461B-80E4-B5FEB1ADF88D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35C3835-8DDD-461B-80E4-B5FEB1ADF88D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -103,9 +103,14 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Creat
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(PolicyConstants.PolicyHolderOnly, policy =>
+    options.AddPolicy(PolicyConstants.SubmitClaimPolicy, policy =>
     {
         policy.RequireRole(RoleConstants.PolicyHolderRole);
+    });
+
+    options.AddPolicy(PolicyConstants.UpdateClaimPolicy, policy =>
+    {
+        policy.RequireRole(RoleConstants.AdministratorRole);
     });
 });
 

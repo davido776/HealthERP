@@ -9,10 +9,24 @@ namespace HealthERP.Presentation.Controllers
     {
         
         [HttpPost]
-        [Authorize(Policy = PolicyConstants.PolicyHolderOnly)]
-        public async Task<IActionResult> CreateClaim([FromBody] CreateClaim.Request request)
+        [Authorize(Policy = PolicyConstants.SubmitClaimPolicy)]
+        public async Task<IActionResult> CreateClaim([FromBody] SubmitClaim.Request request)
         {
             return HandleResult(await Mediator.Send(request));
+        }
+
+        [HttpPut("{id}/approve")]
+        [Authorize(Policy = PolicyConstants.UpdateClaimPolicy)]
+        public async Task<IActionResult> ApproveClaim([FromRoute] string Id)
+        {
+            return HandleResult(await Mediator.Send(new ApproveClaim.Request { ClaimId = Id}));
+        }
+
+        [HttpPut("{id}/decline")]
+        [Authorize(Policy = PolicyConstants.UpdateClaimPolicy)]
+        public async Task<IActionResult> DeclineClaim([FromRoute] string Id)
+        {
+            return HandleResult(await Mediator.Send(new DeclineClaim.Request { ClaimId = Id }));
         }
     }
 }
