@@ -1,6 +1,6 @@
-﻿namespace HealthERP.Application.Core
+﻿namespace HealthERP.Application.Constants
 {
-    public class Constants
+    public class RoleConstants
     {
         public const string PolicyHolderRole = "PolicyHolder";
 

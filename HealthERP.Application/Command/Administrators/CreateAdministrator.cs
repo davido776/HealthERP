@@ -1,4 +1,5 @@
-﻿using HealthERP.Application.Core;
+﻿using HealthERP.Application.Constants;
+using HealthERP.Application.Core;
 using HealthERP.Domain.Administrator;
 using HealthERP.Domain.Identity;
 using HealthERP.Persistence;
@@ -49,12 +50,19 @@ namespace HealthERP.Application.Command.Administrators
                             Email = request.Email
                         };
 
+                        var existingUser = userManager.FindByEmailAsync(request.Email);
+
+                        if (existingUser != null)
+                        {
+                            return Result<Unit>.Failure("Failed to create user.");
+                        }
+
                         // Add roles and create user within the same transaction
                         var result = await userManager.CreateAsync(admin, request.Password);
                         if (result.Succeeded)
                         {
                             // Add PolicyHolder role
-                            await userManager.AddToRoleAsync(admin, Constants.AdministratorRole);
+                            await userManager.AddToRoleAsync(admin, RoleConstants.AdministratorRole);
                             await transaction.CommitAsync(); // Commit the transaction if everything succeeds
                             return Result<Unit>.Success(Unit.Value);
                         }

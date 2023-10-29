@@ -1,10 +1,23 @@
+using HealthERP.Application.Command.Administrators;
+using HealthERP.Application.Command.PolicyHolders;
+using HealthERP.Application.Constants;
+using HealthERP.Application.Interfaces;
 using HealthERP.Domain.Identity;
+using HealthERP.Domain.PolicyHolders;
+using HealthERP.Infrasctructure.Security;
 using HealthERP.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
+using System.Collections.Generic;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,46 +35,90 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(connection);
 });
 
-
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    options.Password.RequireNonAlphanumeric = false;
-})
-.AddEntityFrameworkStores<AppDbContext>()
-.AddSignInManager<SignInManager<ApplicationUser>>()
-.AddDefaultTokenProviders();
+builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 
 
-var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superdupersecret"));
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-        .AddJwtBearer(opt =>
-        {
-            opt.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = key,
-                ValidateIssuer = false,
-                ValidateAudience = false
-            };
-        });
+//builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+//{
+//    options.Password.RequireNonAlphanumeric = false;
+//})
+//.AddEntityFrameworkStores<AppDbContext>()
+//.AddSignInManager<SignInManager<ApplicationUser>>()
+//.AddDefaultTokenProviders();
 
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+                {
+                    options.Password.RequireNonAlphanumeric = false;
+                })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddSignInManager<SignInManager<ApplicationUser>>();
 
+builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "HealthERP.API", Version = "v1" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
+
+
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superdupersecretsuperdupersecretjjgfjdfgudfjgdgfudfudfgudftudgfudftudfgduftudfgduftdufgdufd"));
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        ValidateAudience = false,
+        ValidateIssuer = false,
+        IssuerSigningKey = key
+    };
+});
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateAdministrator.Handler).Assembly));
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(PolicyConstants.PolicyHolderOnly, policy =>
+    {
+        policy.RequireRole(RoleConstants.PolicyHolderRole);
+    });
+});
+
+
+
+
+
 
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.UseHttpsRedirection();
-
 
 
 using var scope = app.Services.CreateScope();
@@ -77,29 +134,18 @@ await context.Database.MigrateAsync();
 await Seed.InitializeRoles(roleManager);
 await Seed.SeedData(userManager, roleManager, context);
 
-var summaries = new[]
+if (app.Environment.IsDevelopment())
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

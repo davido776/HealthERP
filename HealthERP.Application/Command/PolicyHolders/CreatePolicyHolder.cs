@@ -1,4 +1,5 @@
-﻿using HealthERP.Application.Core;
+﻿using HealthERP.Application.Constants;
+using HealthERP.Application.Core;
 using HealthERP.Domain.Identity;
 using HealthERP.Domain.PolicyHolders;
 using HealthERP.Persistence;
@@ -7,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace HealthERP.Application.Command.PolicyHolders
 {
-    public class CreatePolicyHolder 
+    public class CreatePolicyHolder
     {
         public class Request : IRequest<Result<Unit>>
         {
@@ -28,14 +29,11 @@ namespace HealthERP.Application.Command.PolicyHolders
         public class Handler : IRequestHandler<Request, Result<Unit>>
         {
             private readonly UserManager<ApplicationUser> userManager;
-            private readonly RoleManager<ApplicationUser> roleManager;
             private readonly AppDbContext context;
-            public Handler(UserManager<ApplicationUser> UserManager, 
-                           RoleManager<ApplicationUser> RoleManager, 
+            public Handler(UserManager<ApplicationUser> UserManager,
                            AppDbContext Context)
             {
                 userManager = UserManager;
-                roleManager = RoleManager;
                 context = Context;
             }
 
@@ -53,13 +51,20 @@ namespace HealthERP.Application.Command.PolicyHolders
                             NationalId = request.NationalId,
                             DateofBirth = request.DateofBirth,
                         };
- 
+
+                        var existingUser = userManager.FindByEmailAsync(request.Email);
+
+                        if (existingUser != null)
+                        {
+                            return Result<Unit>.Failure("Failed to create user.");
+                        }
+
                         // Add roles and create user within the same transaction
                         var result = await userManager.CreateAsync(policyHolder, request.Password);
                         if (result.Succeeded)
                         {
                             // Add PolicyHolder role
-                            await userManager.AddToRoleAsync(policyHolder, Constants.PolicyHolderRole);
+                            await userManager.AddToRoleAsync(policyHolder, RoleConstants.PolicyHolderRole);
                             await transaction.CommitAsync(); // Commit the transaction if everything succeeds
                             return Result<Unit>.Success(Unit.Value);
                         }
@@ -77,6 +82,7 @@ namespace HealthERP.Application.Command.PolicyHolders
                         return Result<Unit>.Failure("An error occurred: " + ex.Message);
                     }
                 }
+            }
         }
     }
 }

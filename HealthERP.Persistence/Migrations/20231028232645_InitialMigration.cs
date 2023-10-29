@@ -30,6 +30,8 @@ namespace HealthERP.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: true),
+                    LastName = table.Column<string>(type: "TEXT", nullable: true),
                     UserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 256, nullable: true),
@@ -75,8 +77,7 @@ namespace HealthERP.Persistence.Migrations
                 name: "Administrators",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "TEXT", nullable: false),
-                    AdminNumber = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -179,7 +180,9 @@ namespace HealthERP.Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "TEXT", nullable: false),
-                    NIN = table.Column<string>(type: "TEXT", nullable: true)
+                    NationalId = table.Column<string>(type: "TEXT", nullable: true),
+                    PolicyNumber = table.Column<string>(type: "TEXT", nullable: true),
+                    DateofBirth = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -190,6 +193,45 @@ namespace HealthERP.Persistence.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Claims",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
+                    PolicyHolderId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Claims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Claims_PolicyHolders_PolicyHolderId",
+                        column: x => x.PolicyHolderId,
+                        principalTable: "PolicyHolders",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Expense",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Amount = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ClaimId = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expense", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Expense_Claims_ClaimId",
+                        column: x => x.ClaimId,
+                        principalTable: "Claims",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -228,6 +270,16 @@ namespace HealthERP.Persistence.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Claims_PolicyHolderId",
+                table: "Claims",
+                column: "PolicyHolderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expense_ClaimId",
+                table: "Expense",
+                column: "ClaimId");
         }
 
         /// <inheritdoc />
@@ -252,10 +304,16 @@ namespace HealthERP.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "PolicyHolders");
+                name: "Expense");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Claims");
+
+            migrationBuilder.DropTable(
+                name: "PolicyHolders");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

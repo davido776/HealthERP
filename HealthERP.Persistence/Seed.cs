@@ -16,22 +16,23 @@ namespace HealthERP.Persistence
                 {
                     new Administrator
                     {
-                        UserName = "admin",
+                        UserName = "admin@test.com",
                         Email = "admin@test.com",
-                        AdminNumber = "20003"
-
+                        FirstName = "bob",
+                        LastName = "jones"
                     }
                     
                 };
 
                 var holderusers = new List<PolicyHolder>
-                {
-                    
-                    new PolicyHolder
+                {               
+                   new PolicyHolder
                     {
-                        UserName = "holder",
+                        UserName = "holder@test.com",
                         Email = "holder@test.com",
-                        
+                        NationalId = "12345",
+                        FirstName = "jane",
+                        LastName = "doe"
                     }
                 };
 

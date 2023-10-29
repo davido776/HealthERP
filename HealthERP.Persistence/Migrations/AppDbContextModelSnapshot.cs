@@ -17,6 +17,51 @@ namespace HealthERP.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
 
+            modelBuilder.Entity("HealthERP.Domain.Claims.Claim", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PolicyHolderId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PolicyHolderId");
+
+                    b.ToTable("Claims");
+                });
+
+            modelBuilder.Entity("HealthERP.Domain.Expenses.Expense", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClaimId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClaimId");
+
+                    b.ToTable("Expense");
+                });
+
             modelBuilder.Entity("HealthERP.Domain.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -35,6 +80,12 @@ namespace HealthERP.Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -215,20 +266,39 @@ namespace HealthERP.Persistence.Migrations
                 {
                     b.HasBaseType("HealthERP.Domain.Identity.ApplicationUser");
 
-                    b.Property<string>("AdminNumber")
-                        .HasColumnType("TEXT");
-
                     b.ToTable("Administrators");
                 });
 
-            modelBuilder.Entity("HealthERP.Domain.PolicyHolder.PolicyHolder", b =>
+            modelBuilder.Entity("HealthERP.Domain.PolicyHolders.PolicyHolder", b =>
                 {
                     b.HasBaseType("HealthERP.Domain.Identity.ApplicationUser");
 
-                    b.Property<string>("NIN")
+                    b.Property<DateTime>("DateofBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("NationalId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PolicyNumber")
                         .HasColumnType("TEXT");
 
                     b.ToTable("PolicyHolders");
+                });
+
+            modelBuilder.Entity("HealthERP.Domain.Claims.Claim", b =>
+                {
+                    b.HasOne("HealthERP.Domain.PolicyHolders.PolicyHolder", "PolicyHolder")
+                        .WithMany()
+                        .HasForeignKey("PolicyHolderId");
+
+                    b.Navigation("PolicyHolder");
+                });
+
+            modelBuilder.Entity("HealthERP.Domain.Expenses.Expense", b =>
+                {
+                    b.HasOne("HealthERP.Domain.Claims.Claim", null)
+                        .WithMany("Expenses")
+                        .HasForeignKey("ClaimId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -291,13 +361,18 @@ namespace HealthERP.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("HealthERP.Domain.PolicyHolder.PolicyHolder", b =>
+            modelBuilder.Entity("HealthERP.Domain.PolicyHolders.PolicyHolder", b =>
                 {
                     b.HasOne("HealthERP.Domain.Identity.ApplicationUser", null)
                         .WithOne()
-                        .HasForeignKey("HealthERP.Domain.PolicyHolder.PolicyHolder", "Id")
+                        .HasForeignKey("HealthERP.Domain.PolicyHolders.PolicyHolder", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HealthERP.Domain.Claims.Claim", b =>
+                {
+                    b.Navigation("Expenses");
                 });
 #pragma warning restore 612, 618
         }
