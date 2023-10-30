@@ -1,5 +1,6 @@
 ﻿using HealthERP.Application.Constants;
 using HealthERP.Application.Core;
+using HealthERP.Application.Helpers.PolicyHolder;
 using HealthERP.Domain.Identity;
 using HealthERP.Domain.PolicyHolders;
 using HealthERP.Persistence;
@@ -50,7 +51,7 @@ namespace HealthERP.Application.Command.PolicyHolders
                             Email = request.Email,
                             NationalId = request.NationalId,
                             DateofBirth = request.DateofBirth,
-                            PolicyNumber = request.PolicyNumber,
+                            PolicyNumber = GetPolicyNumber(),
                         };
 
                         var existingUser = userManager.FindByEmailAsync(request.Email);
@@ -83,6 +84,25 @@ namespace HealthERP.Application.Command.PolicyHolders
                         return Result<Unit>.Failure("An error occurred: " + ex.Message);
                     }
                 }
+            }
+
+            public string GetPolicyNumber()
+            {
+                bool found = true;
+                var policyNumber = "";
+
+                while(found)
+                {
+                    if (!found)
+                    {
+                        break;
+                    }
+
+                    policyNumber = PolicyHolderHelper.GeneratePolicyNumber();
+                    found = context.PolicyHolders.Any(x => x.PolicyNumber == policyNumber);
+                }
+
+                return policyNumber;
             }
         }
     }
