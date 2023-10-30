@@ -6,14 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HealthERP.Application.Queries.Claims
 {
+
+    public class GetClaimsByPolicyHolderCommand : IRequest<Result<List<ClaimModel>>>
+    {
+        public string? PolicyHolderId { get; set; }
+    }
+
     public class GetClaimsByPolicyHolder
     {
-        public class Request : IRequest<Result<List<ClaimModel>>>
-        {
-            public string? PolicyHolderId { get; set; }
-        }
+        
 
-        public class Handler : IRequestHandler<Request, Result<List<ClaimModel>>>
+        public class Handler : IRequestHandler<GetClaimsByPolicyHolderCommand, Result<List<ClaimModel>>>
         {
             private readonly AppDbContext context;
             public Handler(AppDbContext Context)
@@ -21,7 +24,7 @@ namespace HealthERP.Application.Queries.Claims
                 context = Context;
             }
 
-            public async Task<Result<List<ClaimModel>>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Result<List<ClaimModel>>> Handle(GetClaimsByPolicyHolderCommand request, CancellationToken cancellationToken)
             {
                 var claim = await context.Claims.Include(x => x.PolicyHolder)
                                                 .Include(x => x.Expenses)

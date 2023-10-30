@@ -37,7 +37,7 @@ namespace HealthERP.Presentation.Extensions
                         new string[]{}
                     }
                 });
-                option.CustomSchemaIds(type => type.ToString());
+                //option.CustomSchemaIds(type => SwashbuckleSchemaHelper.GetSchemaId(type));
             });
 
             Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateAdministrator.Handler).Assembly));

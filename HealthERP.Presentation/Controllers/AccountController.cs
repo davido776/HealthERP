@@ -87,13 +87,14 @@ namespace HealthERP.Presentation.Controllers
         }
 
         [HttpPost("admin")]
-        public async Task<IActionResult> CreateAdministrator([FromBody] CreateAdministrator.Request request)
+        public async Task<IActionResult> CreateAdministrator([FromBody] CreateAdministratorCommand request)
         {
+            //return Ok();
             return HandleResult(await Mediator.Send(request));
         }
 
         [HttpPost("policy-holder")]
-        public async Task<IActionResult> CreatePolicyHolder([FromBody] CreatePolicyHolder.Request request)
+        public async Task<IActionResult> CreatePolicyHolder([FromBody] CreatePoliyholderCommand request)
         {
             return HandleResult(await Mediator.Send(request));
         }

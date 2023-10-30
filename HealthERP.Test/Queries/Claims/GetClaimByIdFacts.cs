@@ -30,7 +30,7 @@ namespace HealthERP.Test.Queries.Claims
 
             var handler = new GetClaimById.Handler(context);
 
-            var request = fixture.Build<GetClaimById.Request>()
+            var request = fixture.Build<GetClaimByIdCommand>()
                                  .With(x => x.ClaimId, claim.Id)
                                  .Create();
 
@@ -50,7 +50,7 @@ namespace HealthERP.Test.Queries.Claims
 
             var handler = new GetClaimById.Handler(context);
 
-            var request = fixture.Build<GetClaimById.Request>()
+            var request = fixture.Build<GetClaimByIdCommand>()
                                  .With(x => x.ClaimId, claim.Id)
                                  .Create();
 

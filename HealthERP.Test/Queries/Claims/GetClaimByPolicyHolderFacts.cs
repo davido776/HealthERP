@@ -40,7 +40,7 @@ namespace HealthERP.Test.Queries.Claims
 
             var handler = new GetClaimsByPolicyHolder.Handler(context);
 
-            var request = fixture.Build<GetClaimsByPolicyHolder.Request>()
+            var request = fixture.Build<GetClaimsByPolicyHolderCommand>()
                                  .With(x => x.PolicyHolderId, policyHolder.Id)
                                  .Create();
 
@@ -61,7 +61,7 @@ namespace HealthERP.Test.Queries.Claims
 
             var handler = new GetClaimsByPolicyHolder.Handler(context);
 
-            var request = fixture.Build<GetClaimsByPolicyHolder.Request>()
+            var request = fixture.Build<GetClaimsByPolicyHolderCommand>()
                                  .Create();
 
             var result = await handler.Handle(request, CancellationToken.None);

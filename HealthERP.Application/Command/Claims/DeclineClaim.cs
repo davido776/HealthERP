@@ -7,22 +7,23 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.Claims
 {
+
+    public class DeclineClaimCommand : IRequest<Result<string>>
+    {
+        [Required]
+        public string? ClaimId { get; set; }
+    }
+
     public class DeclineClaim
     {
-        public class Request : IRequest<Result<string>>
-        {
-            [Required]
-            public string? ClaimId { get; set; }
-        }
-
-        public class Handler : IRequestHandler<Request, Result<string>>
+        public class Handler : IRequestHandler<DeclineClaimCommand, Result<string>>
         {
             private readonly AppDbContext context;
             public Handler(AppDbContext Context)
             {
                 context = Context;
             }
-            public async Task<Result<string>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Result<string>> Handle(DeclineClaimCommand request, CancellationToken cancellationToken)
             {
                 var claim = await context.Claims.FirstOrDefaultAsync(x => x.Id == request.ClaimId);
 

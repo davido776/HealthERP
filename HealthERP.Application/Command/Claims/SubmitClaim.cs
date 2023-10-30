@@ -8,28 +8,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.Claims
 {
+
+    public class SubmitClaimCommand : IRequest<Result<Unit>>
+    {
+        public List<SubmitClaim.ExpenseModel> Expenses { get; set; } = new List<SubmitClaim.ExpenseModel>();
+    }
+
+
     public class SubmitClaim
     {
-        public class Request : IRequest<Result<Unit>>
-        {
-            public List<ExpenseModel> Expenses { get; set; } = new List<ExpenseModel>();
-        }
-
         public class ExpenseModel
         {
-            [Required]
             public ExpenseType Type { get; set; }
 
-            [Required]
             public string? Name { get; set; }
 
             public decimal Amount { get; set; }
 
-            [Required]
             public DateTime Date { get; set; }
         }
 
-        public class Handler : IRequestHandler<Request, Result<Unit>>
+        public class Handler : IRequestHandler<SubmitClaimCommand, Result<Unit>>
         {
             private readonly IUserAccessor userAccessor;
             private readonly AppDbContext context;
@@ -38,7 +37,7 @@ namespace HealthERP.Application.Command.Claims
                 userAccessor = UserAccessor;
                 context = Context;
             }
-            public async Task<Result<Unit>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(SubmitClaimCommand request, CancellationToken cancellationToken)
             {
                 var policyHolderId = userAccessor.GetUsername();
                 

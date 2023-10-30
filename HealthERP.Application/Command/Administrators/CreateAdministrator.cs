@@ -9,26 +9,28 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.Administrators
 {
+
+    public class CreateAdministratorCommand : IRequest<Result<string>>
+    {
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+
+        [Required]
+        public DateTime DateofBirth { get; set; }
+    }
+
     public class CreateAdministrator
     {
-        public class Request : IRequest<Result<Unit>>
-        {
-            [Required]
-            public string FirstName { get; set; }
-
-            [Required]
-            public string LastName { get; set; }
-
-            [Required]
-            public string Email { get; set; }
-
-            [Required]
-            public string Password { get; set; }
-
-            public DateTime DateofBirth { get; set; }
-        }
-
-        public class Handler : IRequestHandler<Request, Result<Unit>>
+        public class Handler : IRequestHandler<CreateAdministratorCommand, Result<string>>
         {
             private readonly UserManager<ApplicationUser> userManager;
             private readonly AppDbContext context;
@@ -39,7 +41,7 @@ namespace HealthERP.Application.Command.Administrators
                 context = Context;
             }
 
-            public async Task<Result<Unit>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Result<string>> Handle(CreateAdministratorCommand request, CancellationToken cancellationToken)
             {
                 using (var transaction = await context.Database.BeginTransactionAsync())
                 {
@@ -52,11 +54,11 @@ namespace HealthERP.Application.Command.Administrators
                             Email = request.Email
                         };
 
-                        var existingUser = userManager.FindByEmailAsync(request.Email);
+                        var existingUser = await userManager.FindByEmailAsync(request.Email);
 
                         if (existingUser != null)
                         {
-                            return Result<Unit>.Failure("Failed to create user.");
+                            return Result<string>.Failure("Failed to create user.");
                         }
 
                         // Add roles and create user within the same transaction
@@ -66,20 +68,20 @@ namespace HealthERP.Application.Command.Administrators
                             // Add PolicyHolder role
                             await userManager.AddToRoleAsync(admin, RoleConstants.AdministratorRole);
                             await transaction.CommitAsync(); // Commit the transaction if everything succeeds
-                            return Result<Unit>.Success(Unit.Value);
+                            return Result<string>.Success("");
                         }
                         else
                         {
                             // Handle user creation failure if needed
                             await transaction.RollbackAsync(); // Rollback the transaction in case of failure
-                            return Result<Unit>.Failure("Failed to create user.");
+                            return Result<string>.Failure("Failed to create user.");
                         }
                     }
                     catch (Exception ex)
                     {
                         // Handle exceptions if necessary
                         await transaction.RollbackAsync(); // Rollback the transaction on exceptions
-                        return Result<Unit>.Failure("An error occurred: " + ex.Message);
+                        return Result<string>.Failure("An error occurred: " + ex.Message);
                     }
                 }
             }

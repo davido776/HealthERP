@@ -10,32 +10,35 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.PolicyHolders
 {
+
+    public class CreatePoliyholderCommand : IRequest<Result<Unit>>
+    {
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
+        [Required]
+        public string Email { get; set; }
+
+        [Required]
+        public string Password { get; set; }
+
+        [Required]
+        public string? NationalId { get; set; }
+
+
+        public string? PolicyNumber { get; set; }
+
+        [Required]
+        public DateTime DateofBirth { get; set; }
+    }
+
     public class CreatePolicyHolder
     {
-        public class Request : IRequest<Result<Unit>>
-        {
-            [Required]
-            public string FirstName { get; set; }
-
-            [Required]
-            public string LastName { get; set; }
-
-            [Required]
-            public string Email { get; set; }
-
-            [Required]
-            public string Password { get; set; }
-
-            [Required]
-            public string? NationalId { get; set; }
-
-            public string? PolicyNumber { get; set; }
-
-            [Required]
-            public DateTime DateofBirth { get; set; }
-        }
-
-        public class Handler : IRequestHandler<Request, Result<Unit>>
+        
+        public class Handler : IRequestHandler<CreatePoliyholderCommand, Result<Unit>>
         {
             private readonly UserManager<ApplicationUser> userManager;
             private readonly AppDbContext context;
@@ -46,7 +49,7 @@ namespace HealthERP.Application.Command.PolicyHolders
                 context = Context;
             }
 
-            public async Task<Result<Unit>> Handle(Request request, CancellationToken cancellationToken)
+            public async Task<Result<Unit>> Handle(CreatePoliyholderCommand request, CancellationToken cancellationToken)
             {
                 using (var transaction = await context.Database.BeginTransactionAsync())
                 {

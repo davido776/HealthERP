@@ -42,7 +42,7 @@ namespace HealthERP.Test.Commands.Claims
                                  .With(x => x.Amount, 100)
                                  .Create();
 
-            var request = fixture.Build<SubmitClaim.Request>()
+            var request = fixture.Build<SubmitClaimCommand>()
                                 .With(r => r.Expenses, new List<SubmitClaim.ExpenseModel> { expense1, expense2} )
                                 .Create();
 

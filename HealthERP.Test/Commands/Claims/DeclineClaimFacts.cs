@@ -31,7 +31,7 @@ namespace HealthERP.Test.Commands.Claims
 
             var handler = new DeclineClaim.Handler(context);
 
-            var request = fixture.Build<DeclineClaim.Request>()
+            var request = fixture.Build<DeclineClaimCommand>()
                                  .With(x => x.ClaimId, claim.Id)
                                  .Create();
 
@@ -53,7 +53,7 @@ namespace HealthERP.Test.Commands.Claims
 
             var handler = new DeclineClaim.Handler(context);
 
-            var request = fixture.Build<DeclineClaim.Request>()
+            var request = fixture.Build<DeclineClaimCommand>()
                                  .With(x => x.ClaimId, claim.Id)
                                  .Create();
 
