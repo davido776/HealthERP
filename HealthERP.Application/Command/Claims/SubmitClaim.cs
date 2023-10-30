@@ -4,6 +4,7 @@ using HealthERP.Domain.Claims;
 using HealthERP.Domain.Expenses;
 using HealthERP.Persistence;
 using MediatR;
+using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.Claims
 {
@@ -16,12 +17,15 @@ namespace HealthERP.Application.Command.Claims
 
         public class ExpenseModel
         {
+            [Required]
             public ExpenseType Type { get; set; }
 
+            [Required]
             public string? Name { get; set; }
 
             public decimal Amount { get; set; }
 
+            [Required]
             public DateTime Date { get; set; }
         }
 

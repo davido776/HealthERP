@@ -3,6 +3,7 @@ using HealthERP.Domain.Claims;
 using HealthERP.Persistence;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.Claims
 {
@@ -10,6 +11,7 @@ namespace HealthERP.Application.Command.Claims
     {
         public class Request : IRequest<Result<string>>
         {
+            [Required]
             public string? ClaimId { get; set; }
         }
 

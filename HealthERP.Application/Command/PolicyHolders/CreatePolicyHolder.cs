@@ -6,6 +6,7 @@ using HealthERP.Domain.PolicyHolders;
 using HealthERP.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.PolicyHolders
 {
@@ -13,17 +14,24 @@ namespace HealthERP.Application.Command.PolicyHolders
     {
         public class Request : IRequest<Result<Unit>>
         {
+            [Required]
             public string FirstName { get; set; }
 
+            [Required]
             public string LastName { get; set; }
 
+            [Required]
             public string Email { get; set; }
 
+            [Required]
             public string Password { get; set; }
+
+            [Required]
             public string? NationalId { get; set; }
 
             public string? PolicyNumber { get; set; }
 
+            [Required]
             public DateTime DateofBirth { get; set; }
         }
 

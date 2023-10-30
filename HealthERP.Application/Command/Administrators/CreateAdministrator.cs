@@ -5,6 +5,7 @@ using HealthERP.Domain.Identity;
 using HealthERP.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace HealthERP.Application.Command.Administrators
 {
@@ -12,12 +13,16 @@ namespace HealthERP.Application.Command.Administrators
     {
         public class Request : IRequest<Result<Unit>>
         {
+            [Required]
             public string FirstName { get; set; }
 
+            [Required]
             public string LastName { get; set; }
 
+            [Required]
             public string Email { get; set; }
 
+            [Required]
             public string Password { get; set; }
 
             public DateTime DateofBirth { get; set; }
