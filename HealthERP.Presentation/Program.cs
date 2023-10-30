@@ -1,4 +1,9 @@
 using HealthERP.Presentation.Extensions;
+using FluentValidation.AspNetCore;
+using HealthERP.Application.Command.Administrators;
+using FluentValidation;
+using HealthERP.Application.Command.PolicyHolders;
+using HealthERP.Application.Command.PolicyHolders.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +15,11 @@ builder.Services.AddIdentityServices();
 
 builder.Services.AddApplicationService();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddFluentValidation(config =>
+    {
+        config.RegisterValidatorsFromAssemblyContaining<CreateAdministrator>();
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 
